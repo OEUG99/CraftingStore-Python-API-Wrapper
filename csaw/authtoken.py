@@ -9,4 +9,3 @@ class _AuthToken(requests.auth.AuthBase):
     def __call__(self, r):
         r.headers['token'] = self.token
         return r
-    
