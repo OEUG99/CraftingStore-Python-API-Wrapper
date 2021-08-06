@@ -6,32 +6,33 @@ from csaw.giftcard import GiftCard
 class CSAW:
     """ CraftingStore.net API wrapper."""
 
-    def __init__(self):
+    def __init__(self, token):
         """
         Creates a new instance of the API
         """
-        self._token = None
-        self._auth = None
+
+        # Checking if token is valid, then assigning it.
+        self._auth = self.validate_token(_AuthToken(token))
 
 
-    def auth(self, token):
+
+    def validate_token(self, auth):
         """
-        Used to verify if the authentication token provided is valid.
-        :param token:
+        Makes a request to check if the token is valid or not.
+
         :return:
+        :raise: ValueError: The authentication token is invalid.
         """
-
-        r = requests.get('https://api.craftingstore.net/v7/information', auth=_AuthToken(token))
+        r = requests.get('https://api.craftingstore.net/v7/information', auth=auth)
 
         results = r.json()
 
         if results["success"] is True:
-            #self._token = token
-            self._auth = _AuthToken(token)
-            return self
+            return auth
         else:
-            raise ValueError('CSAW: Invalid auth token provided.')
+            raise ValueError('CSAW: Invalid authentication token provided.')
 
+    @property
     def get_information(self):
         """
         Returns a dictionary containing general information.
@@ -40,6 +41,7 @@ class CSAW:
         r = requests.get('https://api.craftingstore.net/v7/information', auth=self._auth)
         return r.json()
 
+    @property
     def get_giftcards(self, page=0, json=False):
         """
         Fetches payments by page, returns a list of payment dictionaries as a result.
@@ -89,6 +91,7 @@ class CSAW:
 
         return GiftCard(self._auth, data)
 
+    @property
     def get_payments(self, page=1):
         """
         Fetches payments by page, returns a list of payment dictionaries as a result.
@@ -100,6 +103,7 @@ class CSAW:
 
         return data
 
+    @property
     def get_communitygoals(self, page=1):
         """
         Fetches the active community goals. (CraftingStore only supports active community goals.)

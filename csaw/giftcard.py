@@ -1,8 +1,5 @@
 import requests
 
-from csaw.authtoken import _AuthToken
-
-
 class GiftCard:
 
     def __init__(self, auth, data):
