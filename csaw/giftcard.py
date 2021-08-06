@@ -5,8 +5,8 @@ from csaw.authtoken import _AuthToken
 
 class GiftCard:
 
-    def __init__(self, token, data):
-        self._token = token
+    def __init__(self, auth, data):
+        self._auth = auth
 
         # Automatically creates attributes based on data.
         for key in data:
@@ -35,7 +35,7 @@ class GiftCard:
         payload = {'amount': increment}
 
         res = requests.put(f'https://api.craftingstore.net/v7/gift-cards/{self._id}',
-                           json=payload, auth=_AuthToken(self._token))
+                           json=payload, auth=self._auth)
 
         data = res.json()["data"]
 
@@ -47,5 +47,5 @@ class GiftCard:
         self.add_funds(increment)
 
     def delete(self):
-        r = requests.delete(f'https://api.craftingstore.net/v7/gift-cards/{self._id}', auth=_AuthToken(self._token))
+        r = requests.delete(f'https://api.craftingstore.net/v7/gift-cards/{self._id}', auth=self._auth)
         del self

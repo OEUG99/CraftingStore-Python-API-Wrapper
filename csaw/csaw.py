@@ -4,9 +4,15 @@ from csaw.giftcard import GiftCard
 
 
 class CSAW:
+    """ CraftingStore.net API wrapper."""
 
     def __init__(self):
+        """
+        Creates a new instance of the API
+        """
         self._token = None
+        self._auth = None
+
 
     def auth(self, token):
         """
@@ -20,7 +26,8 @@ class CSAW:
         results = r.json()
 
         if results["success"] is True:
-            self._token = token
+            #self._token = token
+            self._auth = _AuthToken(token)
             return self
         else:
             raise ValueError('CSAW: Invalid auth token provided.')
@@ -30,7 +37,7 @@ class CSAW:
         Returns a dictionary containing general information.
         :return:
         """
-        r = requests.get('https://api.craftingstore.net/v7/information', auth=_AuthToken(self._token))
+        r = requests.get('https://api.craftingstore.net/v7/information', auth=self._auth)
         return r.json()
 
     def get_giftcards(self, page=0, json=False):
@@ -40,13 +47,13 @@ class CSAW:
         :param page:
         :return:
         """
-        req = requests.get(f'https://api.craftingstore.net/v7/gift-cards?page={page}', auth=_AuthToken(self._token))
+        req = requests.get(f'https://api.craftingstore.net/v7/gift-cards?page={page}', auth=self._auth)
         raw_results = req.json()["data"]
 
         if json is False:
             results = []
             for giftcardData in raw_results:
-                results.append(GiftCard(self._token, giftcardData))
+                results.append(GiftCard(self._auth, giftcardData))
         else:
             results = raw_results
 
@@ -58,12 +65,12 @@ class CSAW:
         :param id:
         :return:
         """
-        req = requests.get(f'https://api.craftingstore.net/v7/gift-cards/{id}', auth=_AuthToken(self._token))
+        req = requests.get(f'https://api.craftingstore.net/v7/gift-cards/{id}', auth=self._auth)
         data = req.json()["data"]
         if data is None:
             raise ValueError('CSAW: Invalid giftcard ID used.')
         else:
-            return GiftCard(self._token, data)
+            return GiftCard(self._auth, data)
 
     def create_giftcard(self, amount=15, packages=None, categories=None, applyTo=0):
 
@@ -77,10 +84,10 @@ class CSAW:
 
         payload = {'amount': amount, 'packages': packages, 'categories': categories, 'applyTo': applyTo}
 
-        req = requests.post('https://api.craftingstore.net/v7/gift-cards', json=payload, auth=_AuthToken(self._token))
+        req = requests.post('https://api.craftingstore.net/v7/gift-cards', json=payload, auth=self._auth)
         data = req.json()["data"]
 
-        return GiftCard(self._token, data)
+        return GiftCard(self._auth, data)
 
     def get_payments(self, page=1):
         """
@@ -88,7 +95,7 @@ class CSAW:
         :param page:
         :return:
         """
-        req = requests.get(f'https://api.craftingstore.net/v7/payments?page={page}', auth=_AuthToken(self._token))
+        req = requests.get(f'https://api.craftingstore.net/v7/payments?page={page}', auth=self._auth)
         data = req.json()["data"]
 
         return data
@@ -100,7 +107,7 @@ class CSAW:
         :return:
         """
 
-        req = requests.get(f'https://api.craftingstore.net/v7/communitygoals?page={page}', auth=_AuthToken(self._token))
+        req = requests.get(f'https://api.craftingstore.net/v7/communitygoals?page={page}', auth=self._auth)
         data = req.json()["data"]
 
         return data
