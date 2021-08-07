@@ -11,12 +11,12 @@ class CSAW:
         Creates a new instance of the API
         """
         # Checking if token is valid, then assigning it.
-        self._auth = self.validate_token(AuthToken(token))
+        self._auth = self._validate_token(AuthToken(token))
 
-    def validate_token(self, auth):
-        """
-        Makes a request to check if the token is valid or not.
+    def _validate_token(self, auth):
+        """Makes a request to check if the token is valid or not.
 
+        :param auth: str. CraftingStore token.
         :return:
         :raise: ValueError: The authentication token is invalid.
         """
@@ -31,8 +31,8 @@ class CSAW:
 
     @property
     def get_information(self):
-        """
-        Returns a dictionary containing general information.
+        """Returns a dictionary containing general information.
+
         :return:
         """
         r = requests.get('https://api.craftingstore.net/v7/information', auth=self._auth)
@@ -40,10 +40,11 @@ class CSAW:
 
     @property
     def get_giftcards(self, page=0, json=False):
-        """
-        Fetches payments by page.
-        :param json:
-        :param page:
+        """Fetches payments by page.
+
+        :param page: The desired page number. CraftingStore only allows you to access per page, 15 results on each page.
+        :param json: bool. If enabled, it will create a json dict of the giftcards, if false will create a list of
+            :class:`csaw.giftcard.Giftcard` objects.
         :rtype: list
         :return: Returns a list of payment dictionaries as a result.
         """
@@ -60,11 +61,10 @@ class CSAW:
         return results
 
     def get_giftcard(self, card_id):
-        """
-        Returns a :class:`csaw.giftcard.GiftCard` object representing a giftcard, that corresponds to a specific
+        """Returns a :class:`csaw.giftcard.GiftCard` object representing a giftcard, that corresponds to a specific
         giftcard id.
 
-        :param card_id:
+        :param card_id: Id of the giftcard.
         :return: returns a :class:`csaw.giftcard.Giftcard` that represents a
         :rtype: :class:`csaw.giftcard.Giftcard`
         :raise: ValueError: The authentication token is invalid.
@@ -77,14 +77,13 @@ class CSAW:
             return Giftcard(self._auth, data)
 
     def create_giftcard(self, amount=15, packages=None, categories=None, applyTo=0):
-        """
-        Creates a giftcard.
+        """Creates a giftcard.
 
-        :param amount:
-        :param packages:
-        :param categories:
-        :param applyTo:
-        :return: returns a :class:`csaw.giftcard.Giftcard` object that represents the giftcard.
+        :param amount: The amount of money on the giftcard.
+        :param packages: list of int ids of the CraftingStore packages that you want the giftcard to work with.
+        :param categories: list of int ids of the CraftingStore catagories that you want the giftcard to work with.
+        :param applyTo: 1 = applies to catagories, 2 = applies to packages, 0 = Whole Store. Defaults to 0.
+        :return: Returns a :class:`csaw.giftcard.Giftcard` object that represents the giftcard.
         :rtype: :class:`csaw.giftcard.Giftcard`
         """
 
@@ -105,10 +104,10 @@ class CSAW:
 
     @property
     def get_payments(self, page=1):
-        """
-        Fetches payments by page
-        :param page:
-        :return: returns a list of payment dictionaries as a result.
+        """Fetches payments by page.
+
+        :param page: The desired page number. CraftingStore only allows you to access per page, 15 results on each page.
+        :return: Returns a list of payment dictionaries as a result.
         :rtype: list
         """
         req = requests.get(f'https://api.craftingstore.net/v7/payments?page={page}', auth=self._auth)
@@ -118,9 +117,9 @@ class CSAW:
 
     @property
     def get_communitygoals(self, page=1):
-        """
-        Fetches the active community goals. (CraftingStore only supports active community goals.)
-        :param page:
+        """Fetches the active community goals. (CraftingStore only supports active community goals.)
+
+        :param page: The desired page number. CraftingStore only allows you to access per page, 15 results on each page.
         :rtype: list
         :return: Returns a list of community goals.
         """

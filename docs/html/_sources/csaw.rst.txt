@@ -1,0 +1,37 @@
+csaw package
+============
+
+Submodules
+----------
+
+csaw.authtoken module
+---------------------
+
+.. automodule:: csaw.authtoken
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+csaw.csaw module
+----------------
+
+.. automodule:: csaw.csaw
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+csaw.giftcard module
+--------------------
+
+.. automodule:: csaw.giftcard
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: csaw
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -2,7 +2,7 @@ import requests
 
 
 class Giftcard:
-    """ Class that represents a giftcard. Allows for easy accessing of a giftcard, and easy updating both locally
+    """Class that represents a giftcard. Allows for easy accessing of a giftcard, and easy updating both locally
     and via the REST api.
     """
     def __init__(self, auth, data):
@@ -14,7 +14,7 @@ class Giftcard:
 
     @property
     def id(self):
-        """ fetches the giftcard's ID
+        """Fetches the giftcard's ID
 
         :rtype: int
         :return: returns an int that corresponds with the giftcard's id.
@@ -23,7 +23,7 @@ class Giftcard:
 
     @property
     def amount(self):
-        """ fetches the giftcard's initial amount of money. (The total that was on the card before any spending occurred.)
+        """Fetches the giftcard's initial amount of money. (The total that was on the card before any spending occurred.)
 
         :rtype: int
         :return: returns an int that corresponds with the giftcard's initial amount.
@@ -32,7 +32,7 @@ class Giftcard:
 
     @property
     def amountRemaining(self):
-        """ fetches the giftcard's remaining amount of money. (The total amount remaining on the card.)
+        """Fetches the giftcard's remaining amount of money. (The total amount remaining on the card.)
 
         :rtype: int
         :return: returns an int that corresponds with the giftcards initial amount.
