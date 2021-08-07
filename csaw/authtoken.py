@@ -1,8 +1,10 @@
 import requests.auth
 
 
-class _AuthToken(requests.auth.AuthBase):
-
+class AuthToken(requests.auth.AuthBase):
+    """
+    Class that handles authentications for http request.
+    """
     def __init__(self, token):
         self.token = token
 
